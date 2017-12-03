@@ -4,14 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>开门红</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <!--<script type="text/javascript" src="js/echarts.min.js"></script>-->
+    <script type="text/javascript" src="js/echarts.min.js"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=WAmOKrS3VnNh34Y8S5hMt1q7r1EATsAN"></script>
     <!--加载鼠标绘制工具-->
-    <!--<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>-->
-    <!--<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />-->
+    <script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
     <!--加载检索信息窗口-->
-    <!--<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>-->
-    <!--<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />-->
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
     <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
     <style type="text/css">
         body, html{width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
@@ -22,140 +22,175 @@
 </head>
 <body>
 <div id="map"></div>
-<!--<button onclick="addData(1000)">增加数据</button>-->
-<!--<div id="chart" style="width: 100%;height: 33%;"></div>-->
+<button onclick="addData(1000)">增加数据</button>
+<div id="chart" style="width: 100%;height: 33%;"></div>
 </body>
 </html>
 <script type="text/javascript">
-//    var markers = [];
-//    var labels = [];
-//    var overlays = [];
-//    var right = 0;
-//    var chart = null;
-//    var points = [];
+   var markers = [];
+   var labels = [];
+   var overlays = [];
+   var right = 0;
+   var chart = null;
+   var heatPoints = [];
+   var heatmapOverlay = null;
 
-//    function addData() {
-//        labels[0].setContent("<strong>" + 123 + "</strong>" + "</br>" + "录入保费：1000 " + "</br>" + "转入保费：1000");
-//        blingbling(overlays[0]);
-//
-//        // 指定图表的配置项和数据
-//        var option = {
-//
-//            series: [ {
-//                name:'录入保费',
-//                type:'bar',
-//                data:[2, 4, 7, 23, 25, 76, 135, 162, 32, 20, 6, 3,5,3,2],
-//                markPoint : {
-//                    data : [
-//                        {type : 'max', name: '最大值'},
-//                        {type : 'min', name: '最小值'}
-//                    ]
-//                },
-//                markLine : {
-//                    data : [
-//                        {type : 'average', name: '平均值'}
-//                    ]
-//                }
-//            }, {
-//                name:'转入保费',
-//                type:'bar',
-//                data:[10, 20, 30, 26, 28, 70, 175, 182, 48, 18, 6, 2,10,123,34],
-//                markPoint : {
-//                    data : [
-//                        {name : '年最高', value : 182.2, xAxis: 7, yAxis: 183, symbolSize:18},
-//                        {name : '年最低', value : 2.3, xAxis: 11, yAxis: 3}
-//                    ]
-//                },
-//                markLine : {
-//                    data : [
-//                        {type : 'average', name : '平均值'}
-//                    ]
-//                }
-//            }]
-//        };
-//        chart.setOption(option);
-//
-//
-//        points[0].count = 50;
-//        console.log(points);
-//
-//        //详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
-//        //参数说明如下:
-//        /* visible 热力图是否显示,默认为true
-//         * opacity 热力的透明度,1-100
-//         * radius 势力图的每个点的半径大小
-//         * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
-//         *	{
-//                .2:'rgb(0, 255, 255)',
-//                .5:'rgb(0, 110, 255)',
-//                .8:'rgb(100, 0, 255)'
-//            }
-//            其中 key 表示插值的位置, 0~1.
-//                value 为颜色值.
-//         */
-//
-//        heatmapOverlay.setDataSet({data:points,max:100});
-//        heatmapOverlay.show();
-//        closeHeatmap();
-//        function setGradient(){
-//            /*格式如下所示:
-//           {
-//                 0:'rgb(102, 255, 0)',
-//                 .5:'rgb(255, 170, 0)',
-//                 1:'rgb(255, 0, 0)'
-//           }*/
-//            var gradient = {};
-//            var colors = document.querySelectorAll("input[type='color']");
-//            colors = [].slice.call(colors,0);
-//            colors.forEach(function(ele){
-//                gradient[ele.getAttribute("data-key")] = ele.value;
-//            });
-//            heatmapOverlay.setOptions({"gradient":gradient});
-//        }
-//    }
-//    function blingbling(overlay){
-//        overlay.setFillOpacity(0.9);
-//        var rightInterval = setInterval(function () {
-//            console.log(right);
-//            if(right > 10){
-//                right = 0;
-//                clearInterval(rightInterval);
-//                return;
-//            }
-//            right++;
-//            overlay.setFillOpacity(0.1);
-//            setTimeout(function () {
-//                overlay.setFillOpacity(0.9);
-//            },300);
-//        },500);
-//    }
-//    /**
-//     * 获得图形的中心点
-//     */
-//    function getCenterPoint(path)
-//    {
-//
-//        var x = 0.0;
-//        var y = 0.0;
-//        for(var i=0;i<path.length;i++){
-//            x=x+ parseFloat(path[i].lng);
-//            y=y+ parseFloat(path[i].lat);
-//        }
-//        x=x/path.length;
-//        y=y/path.length;
-//
-//        return new BMap.Point(x,y);
-//    }
+   function addData() {
+       labels[0].setContent("<strong>" + 123 + "</strong>" + "</br>" + "录入保费：1000 " + "</br>" + "转入保费：1000");
+       blingbling(overlays[0]);
+
+       // 指定图表的配置项和数据
+       var option = {
+
+           series: [ {
+               name:'录入保费',
+               type:'bar',
+               data:[2, 4, 7, 23, 25, 76, 135, 162, 32, 20, 6, 3,5,3,2],
+               markPoint : {
+                   data : [
+                       {type : 'max', name: '最大值'},
+                       {type : 'min', name: '最小值'}
+                   ]
+               },
+               markLine : {
+                   data : [
+                       {type : 'average', name: '平均值'}
+                   ]
+               }
+           }, {
+               name:'转入保费',
+               type:'bar',
+               data:[10, 20, 30, 26, 28, 70, 175, 182, 48, 18, 6, 2,10,123,34],
+               markPoint : {
+                   data : [
+                       {name : '年最高', value : 182.2, xAxis: 7, yAxis: 183, symbolSize:18},
+                       {name : '年最低', value : 2.3, xAxis: 11, yAxis: 3}
+                   ]
+               },
+               markLine : {
+                   data : [
+                       {type : 'average', name : '平均值'}
+                   ]
+               }
+           }]
+       };
+       chart.setOption(option);
+
+       console.log(heatPoints);
+       heatPoints[0].count = 50;
+
+       heatmapOverlay.setDataSet({data:heatPoints,max:100});
+   }
+   function blingbling(overlay){
+       overlay.setFillOpacity(0.9);
+       var rightInterval = setInterval(function () {
+           console.log(right);
+           if(right > 10){
+               right = 0;
+               clearInterval(rightInterval);
+               return;
+           }
+           right++;
+           overlay.setFillOpacity(0.1);
+           setTimeout(function () {
+               overlay.setFillOpacity(0.9);
+           },300);
+       },500);
+   }
+   /**
+    * 获得图形的中心点
+    */
+   function getCenterPoint(path)
+   {
+
+       var x = 0.0;
+       var y = 0.0;
+       for(var i=0;i<path.length;i++){
+           x=x+ parseFloat(path[i].lng);
+           y=y+ parseFloat(path[i].lat);
+       }
+       x=x/path.length;
+       y=y/path.length;
+
+       return new BMap.Point(x,y);
+   }
 
     function init() {
         var map = new BMap.Map("map");            // 创建Map实例
-        var point = new BMap.Point(116.418261, 39.921984);
+        var point = new BMap.Point(121.553551,38.956839);
         map.centerAndZoom(point,11);      // 初始化地图,用城市名设置地图中心点
         map.enableScrollWheelZoom();                 //启用滚轮放大缩小
-//        var map = new BMap.Map("container");          // 创建地图实例
-//        var point = new BMap.Point(116.418261, 39.921984);
-//        map.centerAndZoom(point, 15);             // 初始化地图，设置中心点坐标和地图级别
-//        map.enableScrollWheelZoom(); // 允许滚轮缩放
+
+        //设置行政区
+        setTimeout(function(){
+            // getBoundary("辽宁省大连市");
+            getBoundary("辽宁省大连市中山区");
+        }, 2000);
+        function getBoundary(boundsName){
+            var bdary = new BMap.Boundary();
+            bdary.get(boundsName, function(rs){       //获取行政区域
+                // map.clearOverlays();        //清除地图覆盖物
+                var count = rs.boundaries.length; //行政区域的点有多少个
+                console.log(count);
+                if (count === 0) {
+                    alert('未能获取当前输入行政区域');
+                    return ;
+                }
+                var pointArray = [];
+                for (var i = 0; i < count; i++) {
+                    var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#ff0000"}); //建立多边形覆盖物
+                    map.addOverlay(ply);  //添加覆盖物
+                    pointArray = pointArray.concat(ply.getPath());
+                }
+                // map.setViewport(pointArray);    //调整视野
+            });
+        }
+
+        //设置热力图
+        var points =[
+            {"lng":121.553551,"lat":38.956839,"count":50}];
+
+        if(!isSupportCanvas()){
+            alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
+        }
+        //详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
+        //参数说明如下:
+        /* visible 热力图是否显示,默认为true
+         * opacity 热力的透明度,1-100
+         * radius 势力图的每个点的半径大小
+         * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
+         *	{
+                .2:'rgb(0, 255, 255)',
+                .5:'rgb(0, 110, 255)',
+                .8:'rgb(100, 0, 255)'
+            }
+            其中 key 表示插值的位置, 0~1.
+                value 为颜色值.
+         */
+        heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
+        map.addOverlay(heatmapOverlay);
+        heatmapOverlay.setDataSet({data:points,max:100});
+        function setGradient(){
+            /*格式如下所示:
+           {
+                 0:'rgb(102, 255, 0)',
+                 .5:'rgb(255, 170, 0)',
+                 1:'rgb(255, 0, 0)'
+           }*/
+            var gradient = {};
+            var colors = document.querySelectorAll("input[type='color']");
+            colors = [].slice.call(colors,0);
+            colors.forEach(function(ele){
+                gradient[ele.getAttribute("data-key")] = ele.value;
+            });
+            heatmapOverlay.setOptions({"gradient":gradient});
+        }
+        //判断浏览区是否支持canvas
+        function isSupportCanvas(){
+            var elem = document.createElement('canvas');
+            return !!(elem.getContext && elem.getContext('2d'));
+        }
+
         /**{-----------------------------------------------------------------------------------------------------
         //这个是让地图显示指定区域
         //第一个参数是左下角，第二个参数是右上角
@@ -166,26 +201,17 @@
             alert(e);
         }
          -----------------------------------------------------------------------------------------------------}**/
-        if(!isSupportCanvas()){
-            alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
-        }
-        //判断浏览区是否支持canvas
-        function isSupportCanvas(){
-            var elem = document.createElement('canvas');
-            return !!(elem.getContext && elem.getContext('2d'));
-        }
 
-        var heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":10, "visible":true, "opacity":70});
-        map.addOverlay(heatmapOverlay);
-        return;
         var overlaycomplete = function(e){
 
         };
         var polygoncomplete = function (overlay) {
             console.log("Polygon");
+            console.log(overlay.getPath());
             console.log(overlay.getBounds().getSouthWest());
             console.log(overlay.getBounds().getNorthEast());
-            points.push({"lng":overlay.getBounds().getSouthWest().lng,"lat":overlay.getBounds().getSouthWest().lat,"count":0});
+            heatPoints.push({"lng":overlay.getBounds().getSouthWest().lng,"lat":overlay.getBounds().getSouthWest().lat,"count":0});
+            console.log(heatPoints);
             var polygonMenu = new BMap.ContextMenu();
             polygonMenu.addItem(new BMap.MenuItem('添加公司', function () {
                 var str=prompt("输入公司名","123");
@@ -222,14 +248,10 @@
                 offset: new BMap.Size(5, 5), //偏离值
                 drawingModes : [BMAP_DRAWING_POLYGON]
             },
-
-            // circleOptions: styleOptions, //圆的样式
-           // polylineOptions: styleOptions, //线的样式
             polygonOptions: styleOptions, //多边形的样式
-           // rectangleOptions: styleOptions //矩形的样式
         });
         //添加鼠标绘制工具监听事件，用于获取绘制结果
-        drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+        // drawingManager.addEventListener('overlaycomplete', overlaycomplete);
         drawingManager.addEventListener('polygoncomplete', polygoncomplete);
 
 
@@ -241,56 +263,6 @@
             overlays.length = 0
 //        }
         -------------------------------------------------------------------------------------}*/
-//        var points = [];
-//        if(!isSupportCanvas()){
-//            alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
-//        }
-//        //详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
-//        //参数说明如下:
-//        /* visible 热力图是否显示,默认为true
-//         * opacity 热力的透明度,1-100
-//         * radius 势力图的每个点的半径大小
-//         * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
-//         *	{
-//                .2:'rgb(0, 255, 255)',
-//                .5:'rgb(0, 110, 255)',
-//                .8:'rgb(100, 0, 255)'
-//            }
-//            其中 key 表示插值的位置, 0~1.
-//                value 为颜色值.
-//         */
-//        heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
-//        map.addOverlay(heatmapOverlay);
-//        heatmapOverlay.setDataSet({data:points,max:100});
-//        //是否显示热力图
-//        function openHeatmap(){
-//            heatmapOverlay.show();
-//        }
-//        function closeHeatmap(){
-//            heatmapOverlay.hide();
-//        }
-//        closeHeatmap();
-//        function setGradient(){
-//            /*格式如下所示:
-//           {
-//                 0:'rgb(102, 255, 0)',
-//                 .5:'rgb(255, 170, 0)',
-//                 1:'rgb(255, 0, 0)'
-//           }*/
-//            var gradient = {};
-//            var colors = document.querySelectorAll("input[type='color']");
-//            colors = [].slice.call(colors,0);
-//            colors.forEach(function(ele){
-//                gradient[ele.getAttribute("data-key")] = ele.value;
-//            });
-//            heatmapOverlay.setOptions({"gradient":gradient});
-//        }
-//        //判断浏览区是否支持canvas
-//        function isSupportCanvas(){
-//            var elem = document.createElement('canvas');
-//            return !!(elem.getContext && elem.getContext('2d'));
-//        }
-
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('chart'));
 
@@ -357,10 +329,5 @@
         chart = myChart;
 
     }
-    function test(){
-        console.log('test');
-    }
-
-
     window.onload = init;
 </script>
